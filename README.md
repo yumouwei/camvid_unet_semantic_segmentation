@@ -10,7 +10,7 @@
 
 ## 1. Semantic segmentation using U-Net
 - Semantic segmentation: assign label to every pixel; single or multiclass
-- Differs from instance segmentation - also need to distinguish each individual object (instance)
+- Differs from instance segmentation (also distinguishes each individual object/instance) and object detection (find bounding box of each object)
 - U-Net, one of the easiest model, originally used for medical physics (or biology?) but has been applied to many other applications
 - Architecture: fully convolutional autoencoder with residual/skip connections
 - Training: image to masks (indexed, different value for each class)
