@@ -5,14 +5,12 @@ Created on Sat Apr 29 11:12:18 2023
 
 @author: yumouwei
 """
-
 import numpy as np
 import cv2
 import os
 from tqdm import tqdm
 
 base_dir = base_dir = os.getcwd()
-
 
 def load_data_from_dir(set_df, resize=False, dim=(256, 256)):
     '''
@@ -55,7 +53,7 @@ color_dict = {
     8: (64, 0, 128),     # Car
     9: (64, 64, 0),      # Pedestrian
     10: (0, 128, 192),   # Bicyclist
-    255: (0, 0, 0)      # Void
+    255: (0, 0, 0)       # Void
 }
 
 def convert_indexed_to_rgb_masks(masks):
