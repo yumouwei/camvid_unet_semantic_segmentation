@@ -1,12 +1,18 @@
 # Multiclass semantic segmentation of CamVid dataset using U-Net
 
-- Summary of the project
+![U-Net 0001TP_2](https://github.com/yumouwei/camvid_unet_semantic_segmentation/raw/main/images/u-net_0001TP_2.gif)
+<br>_Test sequence 0001TP_2. Left to right: input image sequence, true masks, and predicted masks overlaid onto the images_
 
-- How to use codes
-- Trained model - only provide custom U-Net (other 2 using ResNet50V2 and MobileNetV2 as the encoder don't work better)
+This repo consists of my implementation of the U-Net model and two additional variants using a pre-trained ResNet50V2 or MobileNetV2 for performing semantic segmentation for the _Cambridge-driving Labeled Video Database (CamVid)_. I implemented the model in `tensorflow==2.11`.  Please use `./train_model.ipynb` to train new models and `./evaluate_model.ipynb` to evaluate the performances.
 
-- Useful links:
+I treated this project as an opportunity to learn the image segmentation task, including how to prepare the data, what are some of the popular models, and how to evaluate their performances. For this reason I chose a simple algorithm (i.e. U-Net) and a small enough dataset so that I can run these on my own hardware. My final models are still far from state-of-the-art performance but I'm still impressed by how well they work given their simple implementations. I also chose not to include the final model in this repo (even though I kept the `./models` folder) because of their sizes (300~600 MB each) and how easy they can be trained on basic hardware or on Colab.
 
+Some of the useful papers and links I referred to include:
+- Overview of image segmentation: https://arxiv.org/abs/1704.06857, https://arxiv.org/abs/2001.05566, https://www.jeremyjordan.me/semantic-segmentation/, https://medium.com/swlh/image-segmentation-using-deep-learning-a-survey-e37e0f0a1489
+- The original U-Net paper: https://arxiv.org/abs/1505.04597
+- The SegNet paper, which includes a benchmark on the CamVid dataset: https://arxiv.org/abs/1505.07293
+- Papers describing the CamVid dataset: https://doi.org/10.1016/j.patrec.2008.04.005, https://www.robots.ox.ac.uk/~lubor/bmvc09.pdf
+- Benchmarks: https://paperswithcode.com/sota/semantic-segmentation-on-camvid
 
 ## 1. Semantic segmentation using U-Net
 - Semantic segmentation: assign label to every pixel; single or multiclass
