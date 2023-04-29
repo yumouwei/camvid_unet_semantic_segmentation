@@ -79,7 +79,7 @@ def build_unet_resnet50v2(encoder, num_classes, num_filters = 32, kernel_size = 
     U-Net blocks (filters=32): (224, 224, 32) -> (112, 112, 64) -> (56, 56, 128) -> (28, 28, 256) -> (14, 14, 512)
     resnet50v2 skip connection layers:
       - 'conv1_conv'           output shape: (112, 112, 64)
-      - 'conv2_block2_out'    output shape: (56, 56, 256)
+      - 'conv2_block2_out'     output shape: (56, 56, 256)
       - 'conv3_block3_out'     output shape: (28, 28, 512)
       - 'conv4_block5_out'     output shape: (14, 14, 1024)
     encoder output: 
