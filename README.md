@@ -5,7 +5,7 @@
 
 This repo consists of my implementation of the U-Net model and two additional variants using a pre-trained ResNet50V2 or MobileNetV2 for performing semantic segmentation for the _Cambridge-driving Labeled Video Database (CamVid)_. I implemented the model in `tensorflow==2.11`.  Please use `./train_model.ipynb` to train new models and `./evaluate_model.ipynb` to evaluate the performances.
 
-I treated this project as an opportunity to learn the image segmentation task, including how to prepare the data, what are some of the popular models, and how to evaluate their performances. For this reason I chose a simple algorithm (i.e. U-Net) and a small enough dataset so that I can run these on my own hardware. My final models are still far from state-of-the-art performance but I'm still impressed by how well they work given their simple implementations. I also chose not to include the final model in this repo (even though I kept the `./models` folder) because of their sizes (300~600 MB each) and how easy they can be trained on basic hardware or on Colab.
+I treated this project as an opportunity to learn the image segmentation task, including how to prepare the data, what are some of the popular models, and how to evaluate their performances. For this reason I chose a simple algorithm (i.e. U-Net) and a small enough dataset so that I can run these on my own hardware. My final models are still far from state-of-the-art performance but I'm still impressed by how well they work given their simple implementations. I also chose not to include the final model in this repo (even though I kept the `./models` folder) because of their sizes (300~600 MB each) and how easy they can be trained on basic hardwares or on Colab.
 
 Some of the useful papers and links I referred to include:
 - Overview of image segmentation: https://arxiv.org/abs/1704.06857, https://arxiv.org/abs/2001.05566, https://www.jeremyjordan.me/semantic-segmentation/, https://medium.com/swlh/image-segmentation-using-deep-learning-a-survey-e37e0f0a1489
@@ -15,12 +15,18 @@ Some of the useful papers and links I referred to include:
 - Benchmarks: https://paperswithcode.com/sota/semantic-segmentation-on-camvid
 
 ## 1. Semantic segmentation using U-Net
-- Semantic segmentation: assign label to every pixel; single or multiclass
-- Differs from instance segmentation (also distinguishes each individual object/instance) and object detection (find bounding box of each object)
-- U-Net, one of the easiest model, originally used for medical physics (or biology?) but has been applied to many other applications
-- Architecture: fully convolutional autoencoder with residual/skip connections
-- Training: image to masks (indexed, different value for each class)
-- Metrics (commonly quoted): 1. global pixel accuracy, 2. class pixel accuracy, 3. mIOU/Jaccard score
+
+The goal of semantic segmentation is to assign a label to every pixel in a image. It differs from the task of object detection, which tries to find a bounding box for each of the detected object, and instance segmentation, which tries to assign both the semantic class and the specific object instance to each pixel. The class labels can either be binary ("Is this pixel part of this object class or not") or multiclass ("which class does this label belongs to"). For this project I focused on multiclass semantic segmentation.
+
+One of the simpliest models for semantic segmentation is the U-Net, which basically consists of a symmetric fully convolutional encoder-decoder with skip connections between each encoder-decoder stage. It was originally used for segmenting biomedical images but has been applied to many different areas (probably because how easy it can be implemented). The model is trained to reproduce the given segmented masks using the input images.
+
+Some common metrics for evaluating a model's performance includes:
+
+1. Global pixel-wise accuracy
+2. Pixel-wise accuracy per class, as well as the class-average
+3. Intersection-over-union (IOU, also known as the Jaccard score) per class, and the class-average (mIOU)
+
+Please refer to the review papers for the definition of each metric.
 
 ## 2. Dataset
 
