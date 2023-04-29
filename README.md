@@ -18,7 +18,7 @@ Some of the useful papers and links I referred to include:
 
 The goal of semantic segmentation is to assign a label to every pixel in a image. It differs from the task of object detection, which tries to find a bounding box for each of the detected object, and instance segmentation, which tries to assign both the semantic class and the specific object instance to each pixel. The class labels can either be binary ("Is this pixel part of this object class or not") or multiclass ("which class does this label belongs to"). For this project I focused on multiclass semantic segmentation.
 
-One of the simpliest models for semantic segmentation is the U-Net, which basically consists of a symmetric fully convolutional encoder-decoder with skip connections between each encoder-decoder stage. It was originally used for segmenting biomedical images but has been applied to many different areas (probably because how easy it can be implemented). The model is trained to reproduce the given segmented masks using the input images.
+One of the simpliest models for semantic segmentation is the U-Net, which basically consists of a symmetric fully convolutional encoder-decoder network with skip connections between each encoder-decoder stage. It was originally used for segmenting biomedical images but has been applied to many different areas (probably because how easy it can be implemented). The model is trained to reproduce the given segmented masks using the input images.
 
 Some common metrics for evaluating a model's performance includes:
 
@@ -26,7 +26,7 @@ Some common metrics for evaluating a model's performance includes:
 2. Pixel-wise accuracy per class, as well as the class-average
 3. Intersection-over-union (IOU, also known as the Jaccard score) per class, and the class-average (mIOU)
 
-Please refer to the review papers for the definition of each metric.
+Please refer to the review papers for the definition of each metric. My implementations are available in `./utils.py`.
 
 ## 2. Dataset
 
