@@ -34,5 +34,6 @@
 - Compare to SegNet results - "result leaves a lot to be desired" -- reported SegNet result also used additional training data
 
 ## 5. Discussion and future works
+- Data augmentation -- surprisingly difficult with TF2
 - Alternative dataset - e.g. CityScapes & the other one mentioned in SegNet paper
 - Alternative/additional algorithms - e.g. CRF-RNN (can't find functional keras implementation), DeepLab type architecture
