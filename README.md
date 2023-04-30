@@ -19,9 +19,9 @@ Some of the useful papers and links I referred to include:
 
 ## 1. Semantic segmentation using U-Net
 
-The goal of semantic segmentation is to assign a label to every pixel in a image. It differs from the task of object detection, which tries to find a bounding box for each of the detected object, and instance segmentation, which tries to assign both the semantic class and the specific object instance to each pixel. The class labels can either be binary ("Is this pixel part of this object class or not") or multiclass ("which class does this label belongs to"). For this project I focused on multiclass semantic segmentation.
+The goal of semantic segmentation is to assign a label to every pixel in a image. It differs from object detection, which tries to find a bounding box for each of the detected object, and instance segmentation, which tries to assign both the semantic class and the specific object instance to each pixel. The class labels can either be binary ("doesn this pixel belong to the class or not") or multiclass ("which class does this label belongs to"). For this project I focused on multiclass semantic segmentation.
 
-One of the simpliest models for semantic segmentation is the U-Net, which basically consists of a symmetric fully convolutional encoder-decoder network with skip connections between each encoder-decoder stage. It was originally used for segmenting biomedical images but has been applied to many different areas (probably because how easy it can be implemented). The model is trained to reproduce the given segmented masks using the input images.
+One of the simpliest models for semantic segmentation is the U-Net. This network basically consists of a symmetric fully convolutional encoder-decoder network with skip connections between each encoder-decoder stage. It was originally created for segmenting biomedical images but has been applied to many other areas (probably because how easy it can be implemented). The model is trained to reproduce the given segmented masks using the input images.
 
 Some common metrics for evaluating a model's performance includes:
 
@@ -38,13 +38,13 @@ Please refer to the review papers for the definition of each metric. The functio
 
 **_11 semantic categories and data splits_**
 
-The CamVid database for road/driving scene understanding consists of 701 images and hand-annotated masks captured from 5 driving video sequences. The original dataset contains 32 semantic classes, although a 11-category classification (which combines several similar classes) is more often used in literatures. The 701 image-mask pairs are split into 367 for training, 101 for validation, and 233 for testing.
+CamVid is a database for understanding road or driving scenes. It consists of 701 images and hand-annotated masks captured from 5 driving video sequences. The original dataset contains 32 semantic classes, although a 11-category classification (which combines several similar classes) is more often used in the literatures. The 701 image-mask pairs are split into 367 for training, 101 for validation, and 233 for testing.
 
-The data I used (which are included in the `./data` folder) comes from [this repo](https://github.com/lih627/CamVid) credited to [lih627](https://github.com/lih627).
+The data I used (which are included in the `./data` folder) come from [this repo](https://github.com/lih627/CamVid) credited to [lih627](https://github.com/lih627).
 
 ## 3. Implementations in tensorflow
 
-My implementation of the U-Net neural network is available in `./build_model.py`. The model consists of 4 encoder and decoder stages with a latent stage in between. Each stage consists of a convolution block and a MaxPooling2D or Conv2DTranspose layer for downsampling or upsampling. For the convolution block I used 2x(Conv2D-BatchNorm-GeLU); from my tests this performed the best compared to other architectures by either swapping the GeLU with ReLU activation, by dropping the BatchNorm layers, or by replacing them with Dropouts.
+My implementation of the U-Net neural network is available in `./build_model.py`. The model consists of 4 encoder and decoder stages with a latent stage in between. Each stage consists of a convolution block plus a MaxPooling2D or Conv2DTranspose layer for down/upsampling. For the convolution block I used 2x(Conv2D-BatchNorm-GeLU). From my tests this performed the best compared to other architectures by either swapping the GeLU with ReLU activation, by dropping the BatchNorm layers, or by replacing them with Dropouts.
 
 I resized the images & masks to 224x224. The images have the shape (224, 224, 3), 3 for each of the RGB channels. The masks have the shape (224, 224, 1), the last dimension being the integer category label ranging from 0~10 and 255 (the 'Void' class, which is ignored in loss calculation). I used the SparseCategoricalCrossentropy loss and Adam optimizer. One could also use CategoricalCrossentropy loss but that would require one-hot encode the masks and be very memory-intensive. 
 
@@ -85,15 +85,17 @@ Besides the vanilla U-Net I also implemented 2 modified models using the feature
 **_Pixel accuracy vs IOU by class_**
 
 
-The results shown above definitely leaves a lot to be desired. While the model does decently well for classes that have more pixels in the training data such as Sky, Road, Building and to some extent Car and Tree, it performed poorly for smaller classes such as Pole, Fence, and Bicyclist. For a self-driving system I'd be worried if the model cannot identify a road sign not to say hitting a cyclist or a pedestrian.
+The results shown above definitely leaves a lot to be desired. While the models do decently well for classes that have more pixels in the training data such as Sky, Road, Building and to some extent Car and Tree, they perform poorly for smaller classes such as Pole, Fence, and Bicyclist. If this is going to be used for a self-driving system I'd be worried if the model cannot identify a road sign not to say hitting a cyclist or a pedestrian. As a cyclist myself I'm well aware how dangerous those cars and trucks are when their drivers aren't aware of the cyclist around their vehicles.
 
 I included the SegNet benchmarks as I can't find one for U-Net. The SegNet is a very similar model, except it uses pooling indices instead of trainable convolutional layers for upsampling. I'm quite surprised that my models actually do better in 3 of the 11 categories, especially since the SegNet model was trained on a significantly larger dataset.
 
-Finally, I've read about arguments for or against different metrics -- whether pixel accuracy or IOU or something else is better for evaluating a semantic segmentation model. From my tests it seems there is a decent correlation between class pixel accuracy and class IOU, except the anomalies of SignSymbol and Pedestrian. But anyway at least I can tell a good model is a good model using either of these two metrics.
+I'm quite surprised that the two other models using pre-trained models didn't perform much better than the vanilla U-Net. My hypothesis is that, because of how small the training dataset is, the model does not need a more sophisticated encoder network (or maybe we can call it transferable knowledge?) to capture the patterns in this dataset. With a bigger dataset maybe these two models would improve more compared to the vanilla model. To be fair it could also be because of the decoder networks which are basically the same (except at the concatenate layers) for each of the models.
+
+Finally, I've read about arguments for or against using different metrics -- whether pixel accuracy or IOU or something else is better for evaluating a  segmentation model. From my tests it seems there is a decent correlation between class pixel accuracy and class IOU, except the anomalies of SignSymbol and Pedestrian. But anyway at least I can tell a good model is a good model using either of these two metrics.
 
 ## 5. Future works
 
-Here are some of the ideas on improving the model I've either thought about, read about but haven't tried, or something I've tried but didn't work out:
+Here are some of the ideas for improving the model I've either thought about, read about but haven't tried, or something I've tried but didn't work out:
 
 1. Use data augmentation. This was emphasized in the original U-Net paper as they had a very limited dataset for training their model. I thought this was going to be a easy thing to do but it turned out to be quite difficult using the augmentation functions in `tf.keras`.
 2. Add more training data, such as the Cityscapes dataset which is a significantly bigger dataset than CamVid. From my experience add more data almost always help improving the performance of a model.
