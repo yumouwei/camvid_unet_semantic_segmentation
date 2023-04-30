@@ -1,6 +1,6 @@
 # Multiclass semantic segmentation of CamVid dataset using U-Net
 <div>
-<img src="https://github.com/yumouwei/camvid_unet_semantic_segmentation/raw/main/images/u-net_0001TP_2.gif" width="800" >
+<img src="https://github.com/yumouwei/camvid_unet_semantic_segmentation/raw/main/animations/u-net_0001TP_2.gif" width="800" >
 </div>
 
 **_Test sequence 0001TP_2. Left to right: input image sequence, true masks, and predicted masks overlaid onto the images_**
