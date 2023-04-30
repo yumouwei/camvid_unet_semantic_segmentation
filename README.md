@@ -1,9 +1,9 @@
 # Multiclass semantic segmentation of CamVid dataset using U-Net
 <div>
-<img src="https://github.com/yumouwei/camvid_unet_semantic_segmentation/raw/main/images/u-net_0001TP_2.gif" width="600" >
+<img src="https://github.com/yumouwei/camvid_unet_semantic_segmentation/raw/main/images/u-net_0001TP_2.gif" width="800" >
 </div>
 
-**Test sequence 0001TP_2. Left to right: input image sequence, true masks, and predicted masks overlaid onto the images**
+**_Test sequence 0001TP_2. Left to right: input image sequence, true masks, and predicted masks overlaid onto the images_**
 
 
 This repo consists of my implementation of the U-Net model and two additional variants using a pre-trained ResNet50V2 or MobileNetV2 for performing semantic segmentation for the _Cambridge-driving Labeled Video Database (CamVid)_. I implemented the model in `tensorflow==2.11`.  Please use `./train_model.ipynb` to train new models and `./evaluate_model.ipynb` to evaluate the performances.
@@ -36,7 +36,7 @@ Please refer to the review papers for the definition of each metric. The functio
 <img src="https://user-images.githubusercontent.com/46117079/235361740-4f6a6607-d2a7-48ff-893d-ed5c5226bdb9.png" width="600" >
 </div>
 
-**11 semantic categories and data splits**
+**_11 semantic categories and data splits_**
 
 The CamVid database for road/driving scene understanding consists of 701 images and hand-annotated masks captured from 5 driving video sequences. The original dataset contains 32 semantic classes, although a 11-category classification (which combines several similar classes) is more often used in literatures. The 701 image-mask pairs are split into 367 for training, 101 for validation, and 233 for testing.
 
@@ -51,12 +51,51 @@ I resized the images & masks to 224x224. The images have the shape (224, 224, 3)
 Besides the vanilla U-Net I also implemented 2 modified models using the feature extractors from pre-trained ResNet50V2 and MobileNetV2. The decoder networks used in these 2 models are identical to the vanilla U-Net.
 
 ## 4. Results
+<div>
+<img src="https://user-images.githubusercontent.com/46117079/235374354-f75ce977-163b-4cd6-929e-6f0700f44a55.png" width="1000" >
+</div>
 
-- Show images (image, true_mask, pred_mask)
-- Compare 3 U-Net models -- hypothesis on why the pre-trained encoder models don't work better (dataset too small)
-- Compare to SegNet results - "result leaves a lot to be desired" -- reported SegNet result also used additional training data
+**_Image, true mask, predicted mask using the vanilla U-Net_**
 
-## 5. Discussion and future works
-- Data augmentation -- surprisingly difficult with TF2
-- Alternative dataset - e.g. CityScapes & the other one mentioned in SegNet paper
-- Alternative/additional algorithms - e.g. CRF-RNN (can't find functional keras implementation), DeepLab type architecture
+
+| **Model** | U-Net | w.ResNet50V2 | w.MobileNetV2 | _SegNet (3.5k training set)_ |
+|---|---|---|---|---|
+| _Sky_ | **96.1** | 95.7 | 94.6 | _96.1_ |
+| _Building_ | 85.3 | 84.0 | **90.0** | _89.6_ |
+| _Pole_ | 22.0 | **28.4** | 17.4 | _32.1_ |
+| _Road_ | **96.7** | 96.5 | 94.3 | _96.4_ |
+| _Pavement_ | 80.5 | 85.9 | **89.2** | _62.2_ |
+| _Tree_ | 76.7 | 75.1 | **79.0** | _83.4_ |
+| _SignSymbol_ | 47.3 | **50.3** | 29.9 | _52.7_ |
+| _Fence_ | 23.3 | **31.5** | 27.5 | _53.45_ |
+| _Car_ | **81.6** | 74.1 | 72.5 | _87.7_ |
+| _Pedestrian_ | **60.6** | 41.1 | 37.4 | _62.2_ |
+| _Bicyclist_ | **32.0** | 29.4 | 11.9 | _36.5_ |
+| **Class avg.** | **58.5** | 57.7 | 53.6 | _71.20_ |
+| **Global Avg.** | 86.4 | 86.0 | **87.0** | _90.40_ |
+| **mIOU** | **0.52** | 0.50 | 0.50 | _0.60_ |
+
+**_Pixel accuracy by class, class average, global average, and mIOU of the 3 U-Net models plus SegNet as reported from the [paper](https://arxiv.org/abs/1505.07293). The SegNet model was also trained on an extended 3.5k image training set so it isn't exactly a fair comparison._**
+
+
+<div>
+<img width="600" alt="image" src="https://user-images.githubusercontent.com/46117079/235374182-2c0e003e-e0cf-41f4-8c37-8e63bf0524da.png">
+</div>
+
+**_Pixel accuracy vs IOU by class_**
+
+
+The results shown above definitely leaves a lot to be desired. While the model does decently well for classes that have more pixels in the training data such as Sky, Road, Building and to some extent Car and Tree, it performed poorly for smaller classes such as Pole, Fence, and Bicyclist. For a self-driving system I'd be worried if the model cannot identify a road sign not to say hitting a cyclist or a pedestrian.
+
+I included the SegNet benchmarks as I can't find one for U-Net. The SegNet is a very similar model, except it uses pooling indices instead of trainable convolutional layers for upsampling. I'm quite surprised that my models actually do better in 3 of the 11 categories, especially since the SegNet model was trained on a significantly larger dataset.
+
+Finally, I've read about arguments for or against different metrics -- whether pixel accuracy or IOU or something else is better for evaluating a semantic segmentation model. From my tests it seems there is a decent correlation between class pixel accuracy and class IOU, except the anomalies of SignSymbol and Pedestrian. But anyway at least I can tell a good model is a good model using either of these two metrics.
+
+## 5. Future works
+
+Here are some of the ideas on improving the model I've either thought about, read about but haven't tried, or something I've tried but didn't work out:
+
+1. Use data augmentation. This was emphasized in the original U-Net paper as they had a very limited dataset for training their model. I thought this was going to be a easy thing to do but it turned out to be quite difficult using the augmentation functions in `tf.keras`.
+2. Add more training data, such as the Cityscapes dataset which is a significantly bigger dataset than CamVid. From my experience add more data almost always help improving the performance of a model.
+3. Add a Conditional Random Fields module (such as a CRF-RNN layer) after the neural network model. This was used in the first version of DeepLab. I found [this implementation of CRF-RNN for the original keras](https://github.com/sadeepj/crfasrnn_keras) but I couldn't get it to work with tensorflow 2. That author does have an alternative implementation for pytorch which has a lot better documentation than the keras version.
+4. (Obviously) try other algorithms.
