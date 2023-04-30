@@ -1,7 +1,9 @@
 # Multiclass semantic segmentation of CamVid dataset using U-Net
 
-![U-Net 0001TP_2](https://github.com/yumouwei/camvid_unet_semantic_segmentation/raw/main/images/u-net_0001TP_2.gif)
-<br>_Test sequence 0001TP_2. Left to right: input image sequence, true masks, and predicted masks overlaid onto the images_
+<img src="https://github.com/yumouwei/camvid_unet_semantic_segmentation/raw/main/images/u-net_0001TP_2.gif" width="600" >
+
+_Test sequence 0001TP_2. Left to right: input image sequence, true masks, and predicted masks overlaid onto the images_
+
 
 This repo consists of my implementation of the U-Net model and two additional variants using a pre-trained ResNet50V2 or MobileNetV2 for performing semantic segmentation for the _Cambridge-driving Labeled Video Database (CamVid)_. I implemented the model in `tensorflow==2.11`.  Please use `./train_model.ipynb` to train new models and `./evaluate_model.ipynb` to evaluate the performances.
 
@@ -30,11 +32,18 @@ Please refer to the review papers for the definition of each metric. My implemen
 
 ## 2. Dataset
 
-- Describe CamVid dataset: sequences, data split, 32 classes
-- 11 categories (often quoted in studies such as the SegNet paper). Available at here (https://github.com/lih627/CamVid)
+<img src="https://user-images.githubusercontent.com/46117079/235361740-4f6a6607-d2a7-48ff-893d-ed5c5226bdb9.png" width="600" >
 
-## 3. Implementations in tf.keras
-- Used which version of tensorflow 
+_11 semantic categories and data splits_
+
+
+The CamVid database for road/driving scene understanding consists of 701 images and hand-annotated masks captured from 5 driving video sequences. The original dataset contains 32 semantic classes, although a 11-category classification (which combines several similar classes) is more often used in literatures. The 701 image-mask pairs are split into 367 for training, 101 for validation, and 233 for testing.
+
+The data I used (which are included in the `./data` folder) comes from [this repo](https://github.com/lih627/CamVid) thanks to [lih627](https://github.com/lih627).
+
+## 3. Implementations in tensorflow
+
+
 - Network: convolutional block (Conv2D-BN-GeLU-Conv2D-BN-GeLU), pooling and TransposeConv2D for downsampling/upsampling at each stage. 
 - (In constrast, SegNet uses pooling indices for upsampling)
 - Variants using pre-trained encoders
