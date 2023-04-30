@@ -28,7 +28,7 @@ Some common metrics for evaluating a model's performance includes:
 2. Pixel-wise accuracy per class, as well as the class-average
 3. Intersection-over-union (IOU, also known as the Jaccard score) per class, and the class-average (mIOU)
 
-Please refer to the review papers for the definition of each metric. My implementations are available in `./utils.py`.
+Please refer to the review papers for the definition of each metric. The functions for evaluating these metrics are stored in `./utils.py`.
 
 ## 2. Dataset
 
