@@ -58,7 +58,7 @@ Besides the vanilla U-Net I also implemented 2 modified models using the feature
 **_Image, true mask, predicted mask using the vanilla U-Net_**
 
 
-| **Model** | U-Net | w.ResNet50V2 | w.MobileNetV2 | _SegNet (3.5k training set)_ |
+| **Model** | U-Net | w.ResNet50V2 | w.MobileNetV2 | _*SegNet (3.5k training set)_ |
 |---|---|---|---|---|
 | _Sky_ | **96.1** | 95.7 | 94.6 | _96.1_ |
 | _Building_ | 85.3 | 84.0 | **90.0** | _89.6_ |
