@@ -43,7 +43,7 @@ The data I used (which are included in the `./data` folder) comes from [this rep
 
 ## 3. Implementations in tensorflow
 
-My implementation of the U-Net neural network is available under `./build_model.py`. The model consists of 4 encoder and decoder stages with a latent stage in between. Each stage consists of a convolution block and a MaxPooling2D or Conv2DTranspose layer for downsampling or upsampling. For the convolution block I used 2x(Conv2D-BatchNorm-GeLU) which performed better compared to other architectures by either swapping GeLU with ReLU activation or dropping the BatchNorm layer.
+My implementation of the U-Net neural network is available under `./build_model.py`. The model consists of 4 encoder and decoder stages with a latent stage in between. Each stage consists of a convolution block and a MaxPooling2D or Conv2DTranspose layer for downsampling or upsampling. For the convolution block I used 2x(Conv2D-BatchNorm-GeLU); from my tests this performed the best compared to other architectures by either swapping the GeLU with ReLU activation, by dropping the BatchNorm layers, or by replacing it with Dropout layers.
 
 Besides the vanilla U-Net I also implemented 2 modified models using the feature extractors from pre-trained ResNet50V2 and MobileNetV2. The decoder networks used in these 2 models are identical to the vanilla U-Net.
 
