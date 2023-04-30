@@ -1,8 +1,9 @@
 # Multiclass semantic segmentation of CamVid dataset using U-Net
-
+<div>
 <img src="https://github.com/yumouwei/camvid_unet_semantic_segmentation/raw/main/images/u-net_0001TP_2.gif" width="600" >
+</div>
 
-_Test sequence 0001TP_2. Left to right: input image sequence, true masks, and predicted masks overlaid onto the images_
+**Test sequence 0001TP_2. Left to right: input image sequence, true masks, and predicted masks overlaid onto the images**
 
 
 This repo consists of my implementation of the U-Net model and two additional variants using a pre-trained ResNet50V2 or MobileNetV2 for performing semantic segmentation for the _Cambridge-driving Labeled Video Database (CamVid)_. I implemented the model in `tensorflow==2.11`.  Please use `./train_model.ipynb` to train new models and `./evaluate_model.ipynb` to evaluate the performances.
@@ -31,11 +32,11 @@ Some common metrics for evaluating a model's performance includes:
 Please refer to the review papers for the definition of each metric. The functions for evaluating these metrics are stored in `./utils.py`.
 
 ## 2. Dataset
-
+<div>
 <img src="https://user-images.githubusercontent.com/46117079/235361740-4f6a6607-d2a7-48ff-893d-ed5c5226bdb9.png" width="600" >
+</div>
 
-_11 semantic categories and data splits_
-
+**11 semantic categories and data splits**
 
 The CamVid database for road/driving scene understanding consists of 701 images and hand-annotated masks captured from 5 driving video sequences. The original dataset contains 32 semantic classes, although a 11-category classification (which combines several similar classes) is more often used in literatures. The 701 image-mask pairs are split into 367 for training, 101 for validation, and 233 for testing.
 
@@ -44,6 +45,8 @@ The data I used (which are included in the `./data` folder) comes from [this rep
 ## 3. Implementations in tensorflow
 
 My implementation of the U-Net neural network is available in `./build_model.py`. The model consists of 4 encoder and decoder stages with a latent stage in between. Each stage consists of a convolution block and a MaxPooling2D or Conv2DTranspose layer for downsampling or upsampling. For the convolution block I used 2x(Conv2D-BatchNorm-GeLU); from my tests this performed the best compared to other architectures by either swapping the GeLU with ReLU activation, by dropping the BatchNorm layers, or by replacing them with Dropouts.
+
+I resized the images & masks to 224x224. The images have the shape (224, 224, 3), 3 for each of the RGB channels. The masks have the shape (224, 224, 1), the last dimension being the integer category label ranging from 0~10 and 255 (the 'Void' class, which is ignored in loss calculation). I used the SparseCategoricalCrossentropy loss and Adam optimizer. One could also use CategoricalCrossentropy loss but that would require one-hot encode the masks and would take significant amount of memory. 
 
 Besides the vanilla U-Net I also implemented 2 modified models using the feature extractors from pre-trained ResNet50V2 and MobileNetV2. The decoder networks used in these 2 models are identical to the vanilla U-Net.
 
