@@ -39,7 +39,7 @@ _11 semantic categories and data splits_
 
 The CamVid database for road/driving scene understanding consists of 701 images and hand-annotated masks captured from 5 driving video sequences. The original dataset contains 32 semantic classes, although a 11-category classification (which combines several similar classes) is more often used in literatures. The 701 image-mask pairs are split into 367 for training, 101 for validation, and 233 for testing.
 
-The data I used (which are included in the `./data` folder) comes from [this repo](https://github.com/lih627/CamVid) thanks to [lih627](https://github.com/lih627).
+The data I used (which are included in the `./data` folder) comes from [this repo](https://github.com/lih627/CamVid) credited to [lih627](https://github.com/lih627).
 
 ## 3. Implementations in tensorflow
 
