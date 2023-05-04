@@ -25,9 +25,9 @@ One of the simpliest models for semantic segmentation is the U-Net. This network
 
 Some common metrics for evaluating a model's performance includes:
 
-1. Global pixel-wise accuracy
-2. Pixel-wise accuracy per class, as well as the class-average
-3. Intersection-over-union (IOU, also known as the Jaccard score) per class, and the class-average (mIOU)
+1. Pixel-wise prediction accuracy per class ("how many pixels belonging to a specific class are predicted correctly"), as well as the average across all classes (exclude "Void").
+2. Global pixel-wise prediction accuracy ("how many pixels, regardless of class distinctions ("Void" excluded), are predicted correctly")
+3. Intersection-over-union (IOU), also known as the Jaccard score, per class ("how does the prediction overlap with the ground truth"), and the average across all classes or mIOU.
 
 Please refer to the review papers for the definition of each metric. The functions for evaluating these metrics are stored in `./utils.py`.
 
