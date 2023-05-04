@@ -90,7 +90,7 @@ Besides the vanilla U-Net I also implemented 2 modified models using the feature
 
 **_Pixel accuracy vs percentage in test set data_**
 
-The results shown above definitely leaves a lot to be desired. While the models do decently well for classes that have more pixels in the training data such as Sky, Road, Building and to some extent Car and Tree, they perform poorly for smaller classes such as Pole, Fence, and Bicyclist. If this is going to be used for a self-driving system I'd be worried if the model cannot identify a road sign not to say hitting a cyclist or a pedestrian. As a cyclist myself I'm well aware how dangerous those cars and trucks are when their drivers aren't aware of the cyclist around their vehicles.
+The results shown above definitely leaves a lot to be desired. While the models do decently well for classes that have more pixels in the training data such as Sky, Road, Building and to some extent Car and Tree, they perform poorly for smaller classes such as Pole, Fence, and Bicyclist. If this is going to be used for a self-driving system I'd be worried if the model cannot identify a road sign not to say hitting a cyclist or a pedestrian. As a cyclist myself I'm well aware how dangerous those cars and trucks can be when their drivers aren't aware of the cyclist near their vehicles.
 
 I included the SegNet benchmarks as I can't find one for U-Net. The SegNet is a very similar model, except it uses pooling indices instead of trainable convolutional layers for upsampling. I'm quite surprised that my models actually do better in 3 of the 11 categories, especially since the SegNet model was trained on a significantly larger dataset.
 
