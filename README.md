@@ -75,7 +75,7 @@ Besides the vanilla U-Net I also implemented 2 modified models using the feature
 | **Global Avg.** | 86.4 | 86.0 | **87.0** | _90.40_ |
 | **mIOU** | **0.52** | 0.50 | 0.50 | _0.60_ |
 
-**_Pixel accuracy by class, class average, global average, and mIOU of the 3 U-Net models plus SegNet as reported from the [paper](https://arxiv.org/abs/1505.07293). The SegNet model was also trained on an extended 3.5k image training set so it isn't exactly a fair comparison._**
+**_Pixel accuracy by class, class average, global average, and mIOU of the 3 trained U-Net models, plus SegNet (reported from the [paper](https://arxiv.org/abs/1505.07293)). The SegNet model was also trained on an extended 3.5k image training set so it isn't exactly a fair comparison._**
 
 
 <div>
